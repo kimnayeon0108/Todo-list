@@ -14,15 +14,15 @@ public class Log extends Core {
     @Enumerated(value = EnumType.STRING)
     private Actions action;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "to_column_id")
     private Column toColumn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "from_column_id")
     private Column fromColumn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
     private Card card;
 
