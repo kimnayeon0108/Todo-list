@@ -16,4 +16,16 @@ public class Column extends Core{
 
     protected Column() {
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
 }
