@@ -6,9 +6,9 @@ import com.example.todolist.dto.CardAddRequestDTO;
 import com.example.todolist.dto.CardUpdateRequestDto;
 import com.example.todolist.exception.CardNotFoundException;
 import com.example.todolist.exception.ColumnNotFoundException;
+import com.example.todolist.exception.ColumnNotMatchException;
 import com.example.todolist.repository.CardRepository;
 import com.example.todolist.repository.ColumnRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -62,7 +63,7 @@ public class CardServiceTest {
 
         when(columnRepository.findById(anyLong())).thenThrow(ColumnNotFoundException.class);
 
-        Assertions.assertThrows(ColumnNotFoundException.class, () -> cardService.addCard(columnId, cardAddRequestDTO));
+        assertThrows(ColumnNotFoundException.class, () -> cardService.addCard(columnId, cardAddRequestDTO));
 
         verify(cardRepository, times(0)).save(any(Card.class));
     }
@@ -87,8 +88,31 @@ public class CardServiceTest {
     void throwExceptionIfNotExistCard() {
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.findById(anyLong())).thenThrow(CardNotFoundException.class);
-        Assertions.assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, 1L, cardUpdateRequestDto));
+        assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, 1L, cardUpdateRequestDto));
         verify(cardRepository, times(0)).save(any(Card.class));
     }
 
+    @Test
+    @DisplayName("카드 삭제 기능 테스트")
+    void deleteCard() {
+        when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
+        when(cardRepository.findById(anyLong())).thenReturn(Optional.of(card));
+        when(card.isSameColumnId(anyLong())).thenReturn(true);
+
+        cardService.deleteCard(1L, 1L);
+
+        verify(cardRepository, times(1)).delete(any(Card.class));
+    }
+
+    @Test
+    @DisplayName("컬럼 id가 카드의 컬럼 id와 다를 때 ColumnNotMatchException 발생")
+    void throwExceptionIfColumnNotMatch() {
+        when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
+        when(cardRepository.findById(anyLong())).thenReturn(Optional.of(card));
+        when(card.isSameColumnId(anyLong())).thenReturn(false);
+
+        assertThrows(ColumnNotMatchException.class, () -> cardService.deleteCard(1L, 1L));
+
+        verify(cardRepository, times(0)).delete(any(Card.class));
+    }
 }
