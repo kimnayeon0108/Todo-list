@@ -1,6 +1,6 @@
 package com.example.todolist.dto;
 
-public class CardRequestDTO {
+public class CardAddRequestDTO {
 
     private String title;
     private String content;
