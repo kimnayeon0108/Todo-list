@@ -6,6 +6,7 @@ import com.example.todolist.dto.CardAddRequestDTO;
 import com.example.todolist.dto.CardUpdateRequestDto;
 import com.example.todolist.exception.CardNotFoundException;
 import com.example.todolist.exception.ColumnNotFoundException;
+import com.example.todolist.exception.ColumnNotMatchException;
 import com.example.todolist.repository.CardRepository;
 import com.example.todolist.repository.ColumnRepository;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,15 @@ public class CardService {
         card.update(cardUpdateRequestDto.getTitle(), cardUpdateRequestDto.getContent(), column);
 
         return cardRepository.save(card);
+    }
+
+    public void deleteCard(Long columnId, Long cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+
+        if(!card.isSameColumnId(columnId)) {
+            throw new ColumnNotMatchException();
+        }
+
+        cardRepository.delete(card);
     }
 }
