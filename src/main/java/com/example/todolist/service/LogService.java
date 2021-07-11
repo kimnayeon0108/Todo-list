@@ -7,6 +7,8 @@ import com.example.todolist.domain.Log;
 import com.example.todolist.repository.LogRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LogService {
 
@@ -19,5 +21,9 @@ public class LogService {
     public void createLog(Card card, Actions action, Column toColumn) {
         Log log = new Log(card.getAuthor(), action, toColumn, card.getColumn(), card);
         logRepository.save(log);
+    }
+
+    public List<Log> getAllLogs() {
+        return logRepository.findAll();
     }
 }
