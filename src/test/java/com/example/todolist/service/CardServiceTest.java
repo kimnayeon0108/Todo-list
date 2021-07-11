@@ -101,11 +101,14 @@ public class CardServiceTest {
     }
 
     @Test
-    @DisplayName("카드가 없을 시 CardNotFoundException 발생")
+    @DisplayName("카드 수정할 때 카드가 없을 시 CardNotFoundException 발생")
     void throwExceptionIfNotExistCard() {
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.findById(anyLong())).thenThrow(CardNotFoundException.class);
+
         assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, 1L, cardUpdateRequestDto));
+
+        verify(logService, times(0)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(0)).save(any(Card.class));
     }
 
