@@ -92,10 +92,10 @@ public class CardServiceTest {
 
     @Test
     @DisplayName("카드 수정 시 이동하는 카드인지 확인하는 기능 테스트")
-    void isMovedCard() {
+    void getActionType() {
         Long columnId = 1L;
 
-        cardService.isMovedCard(card, columnId);
+        cardService.getActionType(card, columnId);
 
         verify(card, times(1)).isSameColumnId(columnId);
     }
