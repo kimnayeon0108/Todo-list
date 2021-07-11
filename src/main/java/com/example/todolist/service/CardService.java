@@ -40,8 +40,11 @@ public class CardService {
         return cardRepository.save(card);
     }
 
-    public boolean isMovedCard(Card card, Long columnId) {
-        return card.isSameColumnId(columnId);
+    public Actions getActionType(Card card, Long toColumnId) {
+        if (card.isSameColumnId(toColumnId)) {
+            return Actions.UPDATE;
+        }
+        return Actions.MOVE;
     }
 
     public void deleteCard(Long columnId, Long cardId) {
