@@ -85,6 +85,7 @@ public class CardServiceTest {
         cardService.updateCard(1L, 1L, cardUpdateRequestDto);
 
         verify(card, times(1)).update(anyString(), anyString(), any(Column.class));
+        verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(1)).save(any(Card.class));
     }
 
