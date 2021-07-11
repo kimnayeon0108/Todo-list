@@ -37,8 +37,11 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
 
         card.update(cardUpdateRequestDto.getTitle(), cardUpdateRequestDto.getContent(), column);
-
         return cardRepository.save(card);
+    }
+
+    public boolean isMovedCard(Card card, Long columnId) {
+        return card.isSameColumnId(columnId);
     }
 
     public void deleteCard(Long columnId, Long cardId) {
