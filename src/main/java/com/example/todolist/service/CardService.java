@@ -35,8 +35,11 @@ public class CardService {
     public Card updateCard(Long columnId, Long cardId, CardUpdateRequestDto cardUpdateRequestDto) {
         Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        Column toColumn = columnRepository.findById(cardUpdateRequestDto.getToColumnId()).orElseThrow(ColumnNotFoundException::new);
 
+        logService.createLog(card, getActionType(card, cardUpdateRequestDto.getToColumnId()), toColumn);
         card.update(cardUpdateRequestDto.getTitle(), cardUpdateRequestDto.getContent(), column);
+
         return cardRepository.save(card);
     }
 
@@ -50,7 +53,7 @@ public class CardService {
     public void deleteCard(Long columnId, Long cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
 
-        if(!card.isSameColumnId(columnId)) {
+        if (!card.isSameColumnId(columnId)) {
             throw new ColumnNotMatchException();
         }
 
