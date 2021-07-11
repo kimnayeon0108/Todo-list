@@ -36,4 +36,24 @@ public class Card extends Core {
     public boolean isSameColumnId(Long columnId) {
         return this.column.getId().equals(columnId);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public Column getColumn() {
+        return column;
+    }
 }

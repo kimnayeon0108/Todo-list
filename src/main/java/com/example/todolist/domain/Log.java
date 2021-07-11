@@ -28,4 +28,12 @@ public class Log extends Core {
 
     protected Log() {
     }
+
+    public Log(String user, Actions action, Column toColumn, Column fromColumn, Card card) {
+        this.user = user;
+        this.action = action;
+        this.toColumn = toColumn;
+        this.fromColumn = fromColumn;
+        this.card = card;
+    }
 }
