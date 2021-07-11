@@ -134,6 +134,7 @@ public class CardServiceTest {
 
         assertThrows(ColumnNotMatchException.class, () -> cardService.deleteCard(1L, 1L));
 
+        verify(logService, times(0)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(0)).delete(any(Card.class));
     }
 }
