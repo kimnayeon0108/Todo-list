@@ -69,6 +69,7 @@ public class CardServiceTest {
 
         assertThrows(ColumnNotFoundException.class, () -> cardService.addCard(columnId, cardAddRequestDTO));
 
+        verify(logService, times(0)).createLog(any(Card.class));
         verify(cardRepository, times(0)).save(any(Card.class));
     }
 
