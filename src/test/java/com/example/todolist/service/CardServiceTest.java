@@ -121,6 +121,7 @@ public class CardServiceTest {
 
         cardService.deleteCard(1L, 1L);
 
+        verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(1)).delete(any(Card.class));
     }
 
