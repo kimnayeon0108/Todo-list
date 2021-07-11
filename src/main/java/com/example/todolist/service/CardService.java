@@ -52,11 +52,13 @@ public class CardService {
 
     public void deleteCard(Long columnId, Long cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
 
         if (!card.isSameColumnId(columnId)) {
             throw new ColumnNotMatchException();
         }
 
+        logService.createLog(card, Actions.DELETE, column);
         cardRepository.delete(card);
     }
 }
