@@ -1,5 +1,6 @@
 package com.example.todolist.service;
 
+import com.example.todolist.domain.Actions;
 import com.example.todolist.domain.Card;
 import com.example.todolist.domain.Column;
 import com.example.todolist.dto.CardAddRequestDTO;
@@ -27,7 +28,7 @@ public class CardService {
     public void addCard(Long columnId, CardAddRequestDTO cardRequest) {
         Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Card card = new Card(cardRequest.getTitle(), cardRequest.getContent(), cardRequest.getAuthor(), column);
-        logService.createLog(card);
+        logService.createLog(card, Actions.ENROLL, column);
         cardRepository.save(card);
     }
 

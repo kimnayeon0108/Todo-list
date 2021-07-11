@@ -1,5 +1,6 @@
 package com.example.todolist.service;
 
+import com.example.todolist.domain.Actions;
 import com.example.todolist.domain.Card;
 import com.example.todolist.domain.Column;
 import com.example.todolist.dto.CardAddRequestDTO;
@@ -56,7 +57,7 @@ public class CardServiceTest {
 
         cardService.addCard(columnId, cardAddRequestDTO);
 
-        verify(logService, times(1)).createLog(any(Card.class));
+        verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(1)).save(any(Card.class));
     }
 
@@ -69,19 +70,18 @@ public class CardServiceTest {
 
         assertThrows(ColumnNotFoundException.class, () -> cardService.addCard(columnId, cardAddRequestDTO));
 
-        verify(logService, times(0)).createLog(any(Card.class));
+        verify(logService, times(0)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(0)).save(any(Card.class));
     }
 
     @Test
     @DisplayName("카드 수정 기능 테스트")
     void updateCard() {
-
-
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.findById(anyLong())).thenReturn(Optional.of(card)); // 수정할 카드
         when(cardUpdateRequestDto.getTitle()).thenReturn("");
         when(cardUpdateRequestDto.getContent()).thenReturn("");
+
         cardService.updateCard(1L, 1L, cardUpdateRequestDto);
 
         verify(card, times(1)).update(anyString(), anyString(), any(Column.class));
