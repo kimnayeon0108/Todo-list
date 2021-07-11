@@ -44,6 +44,9 @@ public class CardServiceTest {
     @Autowired
     private CardService cardService;
 
+    @MockBean
+    private LogService logService;
+
     @Test
     @DisplayName("카드 추가 기능 테스트")
     void addCard() {
@@ -53,6 +56,7 @@ public class CardServiceTest {
 
         cardService.addCard(columnId, cardAddRequestDTO);
 
+        verify(logService, times(1)).createLog(any(Card.class));
         verify(cardRepository, times(1)).save(any(Card.class));
     }
 
