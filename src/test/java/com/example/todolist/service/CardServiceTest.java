@@ -12,6 +12,7 @@ import com.example.todolist.repository.CardRepository;
 import com.example.todolist.repository.ColumnRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -87,6 +88,16 @@ public class CardServiceTest {
         verify(card, times(1)).update(anyString(), anyString(), any(Column.class));
         verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(1)).save(any(Card.class));
+    }
+
+    @Test
+    @DisplayName("카드 수정 시 이동하는 카드인지 확인하는 기능 테스트")
+    void isMovedCard() {
+        Long columnId = 1L;
+
+        cardService.isMovedCard(card, columnId);
+
+        verify(card, times(1)).isSameColumnId(columnId);
     }
 
     @Test
