@@ -54,7 +54,12 @@ public class CardServiceTest {
     void addCard() {
         Long columnId = 1L;
 
+        when(card.getId()).thenReturn(1L);
+        when(card.getTitle()).thenReturn("title");
+        when(card.getContent()).thenReturn("content");
+        when(card.getAuthor()).thenReturn("yeon");
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
+        when(cardRepository.save(any(Card.class))).thenReturn(card);
 
         cardService.addCard(columnId, cardAddRequestDTO);
 
