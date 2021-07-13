@@ -1,7 +1,7 @@
 package com.example.todolist.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
@@ -9,12 +9,20 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class Core {
 
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdTime;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime modifiedTime;
 
     protected Core() {
+    }
+
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public LocalDateTime getModifiedTime() {
+        return modifiedTime;
     }
 }
