@@ -10,9 +10,9 @@ import com.example.todolist.exception.ColumnNotFoundException;
 import com.example.todolist.exception.ColumnNotMatchException;
 import com.example.todolist.repository.CardRepository;
 import com.example.todolist.repository.ColumnRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,15 +49,19 @@ public class CardServiceTest {
     @MockBean
     private LogService logService;
 
+    @BeforeEach
+    void setUp() {
+        when(card.getId()).thenReturn(1L);
+        when(card.getTitle()).thenReturn("title");
+        when(card.getContent()).thenReturn("content");
+        when(card.getAuthor()).thenReturn("yeon");
+    }
+
     @Test
     @DisplayName("카드 추가 기능 테스트")
     void addCard() {
         Long columnId = 1L;
 
-        when(card.getId()).thenReturn(1L);
-        when(card.getTitle()).thenReturn("title");
-        when(card.getContent()).thenReturn("content");
-        when(card.getAuthor()).thenReturn("yeon");
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.save(any(Card.class))).thenReturn(card);
 
@@ -85,14 +89,15 @@ public class CardServiceTest {
     void updateCard() {
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.findById(anyLong())).thenReturn(Optional.of(card)); // 수정할 카드
+        when(cardRepository.save(any(Card.class))).thenReturn(card);
         when(cardUpdateRequestDto.getTitle()).thenReturn("");
         when(cardUpdateRequestDto.getContent()).thenReturn("");
 
-        cardService.updateCard(1L, 1L, cardUpdateRequestDto);
+        cardService.updateCard(1L, cardUpdateRequestDto);
 
         verify(card, times(1)).update(anyString(), anyString(), any(Column.class));
-        verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(1)).save(any(Card.class));
+        verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
     }
 
     @Test
@@ -111,7 +116,7 @@ public class CardServiceTest {
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.findById(anyLong())).thenThrow(CardNotFoundException.class);
 
-        assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, 1L, cardUpdateRequestDto));
+        assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, cardUpdateRequestDto));
 
         verify(logService, times(0)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(0)).save(any(Card.class));
