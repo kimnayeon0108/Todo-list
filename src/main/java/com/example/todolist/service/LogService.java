@@ -4,10 +4,13 @@ import com.example.todolist.domain.Actions;
 import com.example.todolist.domain.Card;
 import com.example.todolist.domain.Column;
 import com.example.todolist.domain.Log;
+import com.example.todolist.dto.LogCardResponseDTO;
+import com.example.todolist.dto.LogResponseDTO;
 import com.example.todolist.repository.LogRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LogService {
@@ -23,6 +26,10 @@ public class LogService {
         logRepository.save(log);
     }
 
+    public void updateCardLog(Card card, Actions action, Column fromColumn, Column toColumn) {
+        Log log = new Log(card.getAuthor(), action, toColumn, fromColumn, card);
+        logRepository.save(log);
+    }
 
     public List<LogResponseDTO> getAllLogs() {
         return logRepository.findAll().stream()

@@ -42,7 +42,7 @@ public class CardService {
         card.update(cardUpdateRequestDto.getTitle(), cardUpdateRequestDto.getContent(), toColumn);
         Card savedCard = cardRepository.save(card);
 
-        logService.createLog(card, getActionType(card, cardUpdateRequestDto.getToColumnId()), toColumn);
+        logService.updateCardLog(card, getActionType(columnId, cardUpdateRequestDto.getToColumnId()), fromColumn, toColumn);
 
         return new CardResponseDTO(cardId, cardUpdateRequestDto.getToColumnId(), savedCard.getTitle(), savedCard.getContent(), savedCard.getAuthor());
     }
