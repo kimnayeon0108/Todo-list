@@ -8,7 +8,7 @@ import com.example.todolist.service.CardService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/todolist/columns")
+@RequestMapping("/api/todolist/columns/{columnId}")
 public class CardController {
 
     private final CardService cardService;
@@ -17,17 +17,17 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @PostMapping("/{columnId}/cards")
+    @PostMapping("/cards")
     public ApiResult<CardResponseDTO> addCard(@PathVariable Long columnId, @RequestBody CardAddRequestDTO requestDTO) {
         return ApiResult.ok(cardService.addCard(columnId, requestDTO));
     }
 
     @PutMapping("/cards/{cardId}")
-    public ApiResult<CardResponseDTO> updateCard(@PathVariable Long cardId, @RequestBody CardUpdateRequestDto requestDto) {
-        return ApiResult.ok(cardService.updateCard(cardId, requestDto));
+    public ApiResult<CardResponseDTO> updateCard(@PathVariable Long columnId, @PathVariable Long cardId, @RequestBody CardUpdateRequestDto requestDto) {
+        return ApiResult.ok(cardService.updateCard(columnId, cardId, requestDto));
     }
 
-    @DeleteMapping("/{columnId}/cards/{cardId}")
+    @DeleteMapping("/cards/{cardId}")
     public ApiResult<Void> deleteCard(@PathVariable Long columnId, @PathVariable Long cardId) {
         cardService.deleteCard(columnId, cardId);
         return ApiResult.ok(null);
