@@ -4,9 +4,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Column extends Core{
+public class Column extends Core {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String type;

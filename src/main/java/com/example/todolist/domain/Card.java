@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Card extends Core {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
