@@ -22,13 +22,7 @@ public class LogServiceTest {
     private LogService logService;
 
     @MockBean
-    private Log log;
-
-    @MockBean
     private Card card;
-
-    @MockBean
-    private Actions action;
 
     @MockBean
     private Column column;
@@ -40,7 +34,16 @@ public class LogServiceTest {
     @DisplayName("로그 추가 기능 테스트")
     void createLog() {
 
-        logService.createLog(card, action, column);
+        logService.createLog(card, Actions.ENROLL, column);
+
+        verify(logRepository, times(1)).save(any(Log.class));
+    }
+
+    @Test
+    @DisplayName("카드 업데이트 시 로그 추가 기능 테스트")
+    void updateCardLog() {
+
+        logService.updateCardLog(card, Actions.UPDATE, column, column);
 
         verify(logRepository, times(1)).save(any(Log.class));
     }
