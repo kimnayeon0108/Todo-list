@@ -1,6 +1,6 @@
 package com.example.todolist.dto;
 
-public class ApiResult <T>{
+public class ApiResult<T> {
 
     private boolean success;
     private T data;
@@ -10,6 +10,10 @@ public class ApiResult <T>{
         this.success = success;
         this.data = data;
         this.error = error;
+    }
+
+    public static <T> ApiResult<T> ok(T data) {
+        return new ApiResult<>(true, data, null);
     }
 
     public boolean isSuccess() {
