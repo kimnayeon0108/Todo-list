@@ -4,6 +4,7 @@ import com.example.todolist.domain.Actions;
 import com.example.todolist.domain.Card;
 import com.example.todolist.domain.Column;
 import com.example.todolist.dto.CardAddRequestDTO;
+import com.example.todolist.dto.CardResponseDTO;
 import com.example.todolist.dto.CardUpdateRequestDto;
 import com.example.todolist.exception.CardNotFoundException;
 import com.example.todolist.exception.ColumnNotFoundException;
@@ -25,11 +26,12 @@ public class CardService {
         this.logService = logService;
     }
 
-    public void addCard(Long columnId, CardAddRequestDTO cardRequest) {
+    public CardResponseDTO addCard(Long columnId, CardAddRequestDTO cardRequest) {
         Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
         Card card = new Card(cardRequest.getTitle(), cardRequest.getContent(), cardRequest.getAuthor(), column);
-        logService.createLog(card, Actions.ENROLL, column);
-        cardRepository.save(card);
+        Card savedCard = cardRepository.save(card);
+        logService.createLog(savedCard, Actions.ENROLL, column);
+        return new CardResponseDTO(savedCard.getId(), columnId, savedCard.getTitle(), savedCard.getContent(), savedCard.getAuthor());
     }
 
     public Card updateCard(Long columnId, Long cardId, CardUpdateRequestDto cardUpdateRequestDto) {
