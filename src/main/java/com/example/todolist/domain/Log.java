@@ -1,5 +1,7 @@
 package com.example.todolist.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,6 +26,7 @@ public class Log extends Core {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
+    @JsonBackReference
     private Card card;
 
     protected Log() {

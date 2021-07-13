@@ -1,6 +1,9 @@
 package com.example.todolist.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Card extends Core {
@@ -16,6 +19,10 @@ public class Card extends Core {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "column_id")
     private Column column;
+
+    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Log> logs;
 
     protected Card() {
     }
