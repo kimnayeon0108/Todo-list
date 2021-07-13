@@ -3,6 +3,7 @@ package com.example.todolist.controller;
 import com.example.todolist.dto.ApiResult;
 import com.example.todolist.dto.CardAddRequestDTO;
 import com.example.todolist.dto.CardResponseDTO;
+import com.example.todolist.dto.CardUpdateRequestDto;
 import com.example.todolist.service.CardService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,4 +22,8 @@ public class CardController {
         return ApiResult.ok(cardService.addCard(columnId, requestDTO));
     }
 
+    @PutMapping("/cards/{cardId}")
+    public ApiResult<CardResponseDTO> updateCard(@PathVariable Long cardId, @RequestBody CardUpdateRequestDto requestDto) {
+        return ApiResult.ok(cardService.updateCard(cardId, requestDto));
+    }
 }

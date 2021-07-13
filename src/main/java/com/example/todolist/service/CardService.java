@@ -34,15 +34,16 @@ public class CardService {
         return new CardResponseDTO(savedCard.getId(), columnId, savedCard.getTitle(), savedCard.getContent(), savedCard.getAuthor());
     }
 
-    public Card updateCard(Long columnId, Long cardId, CardUpdateRequestDto cardUpdateRequestDto) {
-        Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
+    public CardResponseDTO updateCard(Long cardId, CardUpdateRequestDto cardUpdateRequestDto) {
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
         Column toColumn = columnRepository.findById(cardUpdateRequestDto.getToColumnId()).orElseThrow(ColumnNotFoundException::new);
 
-        logService.createLog(card, getActionType(card, cardUpdateRequestDto.getToColumnId()), toColumn);
-        card.update(cardUpdateRequestDto.getTitle(), cardUpdateRequestDto.getContent(), column);
+        card.update(cardUpdateRequestDto.getTitle(), cardUpdateRequestDto.getContent(), toColumn);
+        Card savedCard = cardRepository.save(card);
 
-        return cardRepository.save(card);
+        logService.createLog(card, getActionType(card, cardUpdateRequestDto.getToColumnId()), toColumn);
+
+        return new CardResponseDTO(cardId, cardUpdateRequestDto.getToColumnId(), savedCard.getTitle(), savedCard.getContent(), savedCard.getAuthor());
     }
 
     public Actions getActionType(Card card, Long toColumnId) {
