@@ -39,4 +39,28 @@ public class Log extends Core {
         this.fromColumn = fromColumn;
         this.card = card;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public Actions getAction() {
+        return action;
+    }
+
+    public Column getToColumn() {
+        return toColumn;
+    }
+
+    public Column getFromColumn() {
+        return fromColumn;
+    }
+
+    public Card getCard() {
+        return card;
+    }
 }

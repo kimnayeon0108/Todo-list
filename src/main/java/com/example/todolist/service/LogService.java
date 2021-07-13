@@ -23,7 +23,14 @@ public class LogService {
         logRepository.save(log);
     }
 
-    public List<Log> getAllLogs() {
-        return logRepository.findAll();
+
+    public List<LogResponseDTO> getAllLogs() {
+        return logRepository.findAll().stream()
+                .map(log -> {
+                    LogCardResponseDTO logCardDTO= new LogCardResponseDTO(log.getCard().getId(), log.getCard().getTitle());
+                    return new LogResponseDTO(log.getId(), log.getUser(), log.getAction(), log.getToColumn().getType(),
+                            log.getFromColumn().getType(), logCardDTO, log.getCreatedTime());
+                })
+                .collect(Collectors.toList());
     }
 }
