@@ -26,4 +26,10 @@ public class CardController {
     public ApiResult<CardResponseDTO> updateCard(@PathVariable Long cardId, @RequestBody CardUpdateRequestDto requestDto) {
         return ApiResult.ok(cardService.updateCard(cardId, requestDto));
     }
+
+    @DeleteMapping("/{columnId}/cards/{cardId}")
+    public ApiResult<Void> deleteCard(@PathVariable Long columnId, @PathVariable Long cardId) {
+        cardService.deleteCard(columnId, cardId);
+        return ApiResult.ok(null);
+    }
 }
