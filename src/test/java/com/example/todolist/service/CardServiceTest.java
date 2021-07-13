@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -93,11 +94,11 @@ public class CardServiceTest {
         when(cardUpdateRequestDto.getTitle()).thenReturn("");
         when(cardUpdateRequestDto.getContent()).thenReturn("");
 
-        cardService.updateCard(1L, cardUpdateRequestDto);
+        cardService.updateCard(1L, 1L, cardUpdateRequestDto);
 
         verify(card, times(1)).update(anyString(), anyString(), any(Column.class));
         verify(cardRepository, times(1)).save(any(Card.class));
-        verify(logService, times(1)).createLog(any(Card.class), any(Actions.class), any(Column.class));
+        verify(logService, times(1)).updateCardLog(any(Card.class), any(Actions.class), any(Column.class), any(Column.class));
     }
 
     @Test
@@ -105,9 +106,9 @@ public class CardServiceTest {
     void getActionType() {
         Long columnId = 1L;
 
-        cardService.getActionType(card, columnId);
+        Actions action = cardService.getActionType(1L, columnId);
 
-        verify(card, times(1)).isSameColumnId(columnId);
+        assertEquals(Actions.UPDATE, action);
     }
 
     @Test
@@ -116,10 +117,10 @@ public class CardServiceTest {
         when(columnRepository.findById(anyLong())).thenReturn(Optional.of(column));
         when(cardRepository.findById(anyLong())).thenThrow(CardNotFoundException.class);
 
-        assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, cardUpdateRequestDto));
+        assertThrows(CardNotFoundException.class, () -> cardService.updateCard(1L, 1L, cardUpdateRequestDto));
 
-        verify(logService, times(0)).createLog(any(Card.class), any(Actions.class), any(Column.class));
         verify(cardRepository, times(0)).save(any(Card.class));
+        verify(logService, times(0)).updateCardLog(any(Card.class), any(Actions.class), any(Column.class), any(Column.class));
     }
 
     @Test
