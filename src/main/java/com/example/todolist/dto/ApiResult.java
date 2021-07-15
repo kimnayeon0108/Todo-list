@@ -1,12 +1,14 @@
 package com.example.todolist.dto;
 
+import com.example.todolist.exception.ErrorCode;
+
 public class ApiResult<T> {
 
     private boolean success;
     private T data;
-    private ErrorResult error;
+    private ErrorCode error;
 
-    public ApiResult(boolean success, T data, ErrorResult error) {
+    public ApiResult(boolean success, T data, ErrorCode error) {
         this.success = success;
         this.data = data;
         this.error = error;
@@ -14,6 +16,10 @@ public class ApiResult<T> {
 
     public static <T> ApiResult<T> ok(T data) {
         return new ApiResult<>(true, data, null);
+    }
+
+    public static ApiResult<Void> fail(ErrorCode errorCode) {
+        return new ApiResult<>(false, null, errorCode);
     }
 
     public boolean isSuccess() {
@@ -32,11 +38,11 @@ public class ApiResult<T> {
         this.data = data;
     }
 
-    public ErrorResult getError() {
+    public ErrorCode getError() {
         return error;
     }
 
-    public void setError(ErrorResult error) {
+    public void setError(ErrorCode error) {
         this.error = error;
     }
 }
