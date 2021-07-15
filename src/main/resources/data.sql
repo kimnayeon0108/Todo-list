@@ -1,1 +1,1 @@
-insert into `column` (`type`) values ('todo'), ('in progress'), ('done');
+insert into `column` (`column_name`) values ('todo'), ('in progress'), ('done');

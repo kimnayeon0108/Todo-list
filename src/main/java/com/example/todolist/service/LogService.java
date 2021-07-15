@@ -35,8 +35,8 @@ public class LogService {
         return logRepository.findAll().stream()
                 .map(log -> {
                     LogCardResponseDTO logCardDTO= new LogCardResponseDTO(log.getCard().getId(), log.getCard().getTitle());
-                    return new LogResponseDTO(log.getId(), log.getUser(), log.getAction(), log.getToColumn().getType(),
-                            log.getFromColumn().getType(), logCardDTO, log.getCreatedTime());
+                    return new LogResponseDTO(log.getId(), log.getUser(), log.getAction(), log.getToColumn().getColumnName(),
+                            log.getFromColumn().getColumnName(), logCardDTO, log.getCreatedTime());
                 })
                 .collect(Collectors.toList());
     }

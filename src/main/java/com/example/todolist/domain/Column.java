@@ -10,7 +10,8 @@ public class Column extends Core {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
+    @javax.persistence.Column(name = "column_name")
+    private String columnName;
 
     @OneToMany(mappedBy = "column", fetch = FetchType.LAZY)
     private List<Card> cards;
@@ -22,8 +23,8 @@ public class Column extends Core {
         return id;
     }
 
-    public String getType() {
-        return type;
+    public String getColumnName() {
+        return columnName;
     }
 
     public List<Card> getCards() {
